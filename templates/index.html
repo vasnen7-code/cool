@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}W Game{% endblock %}
+{% block content %}
+<div class="game-wrapper" data-csrf="{{ csrf_token }}">
+
+  <header class="game-header">
+    <div class="logo">W<span>Game</span></div>
+    <div class="player-info">
+      <span class="player-name">{{ username }}</span>
+      <form method="POST" action="{{ url_for('auth.logout') }}">
+        <button type="submit" class="btn-logout">خروج</button>
+      </form>
+    </div>
+  </header>
+
+  <section class="balance-bar">
+    <div class="balance-item">
+      <span class="balance-icon">🅦</span>
+      <span id="balance-w" data-value="{{ w_balance }}">{{ "%.0f"|format(w_balance) }}</span>
+    </div>
+    <div class="balance-item">
+      <span class="balance-icon">💎</span>
+      <span id="balance-gems" data-value="{{ gems }}">{{ gems }}</span>
+    </div>
+    <div class="balance-item">
+      <span class="balance-icon">👑</span>
+      <span id="balance-crowns" data-value="{{ crowns }}">{{ crowns }}</span>
+    </div>
+  </section>
+
+  {% if offline_gained_w and offline_gained_w > 0 %}
+  <div class="offline-banner">
+    أثناء غيابك، جمعت مبانيك التلقائية <strong>{{ "%.0f"|format(offline_gained_w) }} W</strong> 🎉
+  </div>
+  {% endif %}
+
+  <main class="game-main">
+    <div class="click-zone">
+      <button id="collect-btn" type="button" aria-label="اجمع W">
+        <span class="collect-icon">W</span>
+      </button>
+      <div id="floating-numbers"></div>
+    </div>
+
+    <div class="buildings-panel">
+      <h2>التطويرات</h2>
+      <div class="buildings-list">
+        {% for b in buildings %}
+        <div class="building-card" data-key="{{ b.key_name }}" data-price="{{ b.next_price }}">
+          <div class="building-image">
+            {% if b.image %}<img src="{{ url_for('static', filename='images/' ~ b.image) }}" alt="{{ b.name_ar }}">{% else %}<div class="building-placeholder">🏗️</div>{% endif %}
+          </div>
+          <div class="building-details">
+            <h3>{{ b.name_ar }}</h3>
+            <p class="building-desc">{{ b.description }}</p>
+            <p class="building-level">المستوى: <span class="level-value">{{ b.level }}</span></p>
+            <p class="building-production">
+              {% if b.production_type == 'click_bonus' %}+{{ b.current_production }} W لكل ضغطة
+              {% else %}{{ b.current_production }} W / ثانية{% endif %}
+            </p>
+            <button class="btn-upgrade" data-key="{{ b.key_name }}">
+              تطوير — <span class="price-value">{{ b.next_price }}</span> W
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}

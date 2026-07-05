@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}إنشاء حساب - W Game{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-logo">W<span>Game</span></h1>
+    <h2>إنشاء حساب جديد</h2>
+
+    <a class="btn-telegram" href="{{ telegram_links.otp_bot }}" target="_blank" rel="noopener">
+      🤖 افتح بوت OTP لاستلام رمز التحقق
+    </a>
+
+    <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form" id="register-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <label for="username">اسم المستخدم</label>
+      <input type="text" id="username" name="username" value="{{ username or '' }}" required minlength="4" maxlength="20" pattern="[A-Za-z0-9_]+" title="أحرف إنجليزية وأرقام و _ فقط">
+      <small>4 أحرف على الأقل، إنجليزي وأرقام و ( _ ) فقط، بدون نقاط أو رموز</small>
+
+      <label for="telegram_id">آيدي تيليجرام (Telegram ID)</label>
+      <input type="text" id="telegram_id" name="telegram_id" value="{{ telegram_id or '' }}" required pattern="\d{5,15}" inputmode="numeric" title="أرقام فقط">
+      <small>أرقام فقط. إن لم تعرف آيدي حسابك، أرسل أي رسالة لبوت OTP وسيظهر لك.</small>
+
+      <label for="password">كلمة المرور</label>
+      <input type="password" id="password" name="password" required minlength="6">
+
+      <label for="password_confirm">تأكيد كلمة المرور</label>
+      <input type="password" id="password_confirm" name="password_confirm" required minlength="6">
+
+      <label for="otp_code">رمز التحقق (OTP)</label>
+      <div class="otp-row">
+        <input type="text" id="otp_code" name="otp_code" required pattern="\d{5}" maxlength="5" inputmode="numeric" placeholder="5 أرقام">
+        <button type="button" id="send-otp-btn" class="btn-secondary" data-purpose="register">إرسال الرمز</button>
+      </div>
+      <small id="otp-status" class="otp-status"></small>
+
+      <button type="submit" class="btn-primary">إنشاء الحساب</button>
+    </form>
+    <div class="auth-links">
+      <a href="{{ url_for('auth.login') }}">لديك حساب؟ سجّل الدخول</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}" defer></script>
+{% endblock %}

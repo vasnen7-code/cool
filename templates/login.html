@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}تسجيل الدخول - W Game{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-logo">W<span>Game</span></h1>
+    <h2>تسجيل الدخول</h2>
+    <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <label for="username">اسم المستخدم</label>
+      <input type="text" id="username" name="username" value="{{ username or '' }}" required minlength="4" maxlength="20" pattern="[A-Za-z0-9_]+">
+
+      <label for="password">كلمة المرور</label>
+      <input type="password" id="password" name="password" required minlength="6">
+
+      <label class="checkbox-label">
+        <input type="checkbox" name="remember" value="1"> تذكرني
+      </label>
+
+      <button type="submit" class="btn-primary">دخول</button>
+    </form>
+    <div class="auth-links">
+      <a href="{{ url_for('auth.reset_password_request') }}">نسيت كلمة المرور؟</a>
+      <a href="{{ url_for('auth.register') }}">إنشاء حساب جديد</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

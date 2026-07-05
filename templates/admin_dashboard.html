@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}لوحة الأدمن - W Game{% endblock %}
+{% block content %}
+<div class="game-wrapper">
+  <header class="game-header">
+    <div class="logo">W<span>Game</span> — أدمن</div>
+    <div class="player-info">
+      <span class="player-name">{{ username }}</span>
+      <form method="POST" action="{{ url_for('auth.logout') }}">
+        <button type="submit" class="btn-logout">خروج</button>
+      </form>
+    </div>
+  </header>
+
+  <div class="balance-bar">
+    <div class="balance-item">عدد المستخدمين: {{ total_users }}</div>
+  </div>
+
+  <p style="color:var(--text-muted); text-align:center; margin-top:20px;">
+    هذه نسخة أولية من لوحة الأدمن (Phase 1). أدوات إدارة المستخدمين، المتجر، الصناديق،
+    الأحداث، الهدايا، والنسخ الاحتياطي ستُضاف في المرحلة القادمة فوق نفس الأساس.
+  </p>
+</div>
+{% endblock %}
